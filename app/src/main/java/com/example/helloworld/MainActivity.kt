@@ -16,11 +16,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.helloworld.ui.components.Button
 import com.example.helloworld.ui.components.DestructiveButton
@@ -45,8 +47,16 @@ class MainActivity : ComponentActivity() {
   }
 }
 
+const val DEFAULT_NAME_TEXT = "Guest"
+const val CLICK_HERE_BUTTON_TEXT = "Click here!"
+const val FINISHED_BUTTON_TEXT = "Finished"
+
+/**
+ * [MainScreen] is a fun, interactive demo of Buttons and show/hide of a [Greeting].
+ */
 @Composable
-private fun MainScreen() {
+fun MainScreen(name: String = DEFAULT_NAME_TEXT) {
+  var showGreeting by rememberSaveable { mutableStateOf(false) }
   Box(
     modifier = Modifier
       .fillMaxSize(),
@@ -55,13 +65,15 @@ private fun MainScreen() {
     Column(
       Modifier.width(IntrinsicSize.Max)
     ) {
-      Greeting("Guest")
-      Spacer(modifier = Modifier.height(20.dp))
+      if (showGreeting) {
+        Greeting(name = name)
+        Spacer(modifier = Modifier.height(20.dp))
+      }
       Button(
-        onClick = { },
+        onClick = { showGreeting = true },
         modifier = Modifier.fillMaxWidth()
       ) {
-        Text("Click here!")
+        Text(CLICK_HERE_BUTTON_TEXT)
       }
       Spacer(modifier = Modifier.height(20.dp))
       LogoButton(onClick = { }, Modifier.fillMaxWidth())
@@ -70,8 +82,8 @@ private fun MainScreen() {
         modifier = Modifier.fillMaxWidth(),
         contentAlignment = Alignment.Center
       ) {
-        DestructiveButton(onClick = { /*TODO*/ }) {
-          Text(text = "Finished")
+        DestructiveButton(onClick = { showGreeting = false }) {
+          Text(text = FINISHED_BUTTON_TEXT)
         }
       }
     }

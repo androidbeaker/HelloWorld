@@ -1,4 +1,4 @@
 <resources>
   <string name="app_name">HelloWorld</string>
-  <string name="logo_content_desc">H E B logo</string>
+  <string name="logo_content_desc">H E B logo. Navigates to H E B .com</string>
 </resources>

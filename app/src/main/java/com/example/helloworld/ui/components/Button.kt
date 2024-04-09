@@ -22,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -60,6 +61,29 @@ fun Button(
   )
 
 @Composable
+fun PrimaryButton(
+  onClick: () -> Unit,
+  content: @Composable RowScope.() -> Unit
+) =
+  Button(
+    onClick = onClick,
+    colors = primaryButtonColors(),
+    content = content
+  )
+
+@Composable
+private fun primaryButtonColors (): ButtonColors = ButtonDefaults.buttonColors(
+  containerColor = MaterialTheme.colorScheme.primaryContainer,
+  contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+  disabledContainerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f),
+  disabledContentColor = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.5f)
+)
+
+/**
+ * DestructiveButton is designed for strong purpose; Delete, Cancel, Abort, and similar type actions.
+ * Note: Use sparingly
+ */
+@Composable
 fun DestructiveButton(
   onClick: () -> Unit,
   modifier: Modifier = Modifier,
@@ -91,7 +115,6 @@ private fun destructiveButtonColors (): ButtonColors = ButtonDefaults.buttonColo
   disabledContainerColor = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.5f),
   disabledContentColor = MaterialTheme.colorScheme.onErrorContainer.copy(alpha = 0.5f)
 )
-
 
 @Composable
 fun ElevatedButton(
@@ -172,6 +195,24 @@ fun OutlinedButton(
   )
 
 @Composable
+fun SecondaryButton(
+  onClick: () -> Unit,
+  content: @Composable RowScope.() -> Unit
+) = OutlinedButton(
+  onClick = onClick,
+  colors = secondaryButtonColors(),
+  content = content
+)
+
+@Composable
+private fun secondaryButtonColors (): ButtonColors = ButtonDefaults.outlinedButtonColors(
+  containerColor = MaterialTheme.colorScheme.secondaryContainer,
+  contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+  disabledContainerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f),
+  disabledContentColor = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.5f)
+)
+
+@Composable
 fun TextButton(
   onClick: () -> Unit,
   modifier: Modifier = Modifier,
@@ -197,6 +238,20 @@ fun TextButton(
     content = content
   )
 
+/**
+ * By default, you may use this [LogoButton] without providing anything but an onClick() and you will enjoy
+ * a nice HEB logo button. If you would like to reuse this component to load a different image/logo, ensure you
+ * set the necessary parameters to fit the shape and desired size of your new image asset.
+ *
+ * @param onClick action to be performed on click action
+ * @param modifier
+ * @param shape
+ * @param contentScale
+ * @param logo
+ * @param contentDescription
+ * @param enabled
+ * @param interactionSource
+ */
 @Composable
 fun LogoButton(
   onClick: () -> Unit,
@@ -239,6 +294,12 @@ private fun ButtonsPreview() {
         )
         Button(onClick = { /*TODO*/ }) {
           Text(text = "Button")
+        }
+        PrimaryButton(onClick = { /*TODO*/ }) {
+          Text(text = "Primary")
+        }
+        SecondaryButton(onClick = { /*TODO*/ }) {
+          Text(text = "Secondary")
         }
         DestructiveButton(onClick = { /*TODO*/ }) {
           Text(text = "Destroy")
