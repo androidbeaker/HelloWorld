@@ -1,6 +1,7 @@
 package com.example.helloworld
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
@@ -17,7 +18,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -86,6 +89,30 @@ fun MainScreen(name: String = DEFAULT_NAME_TEXT) {
           Text(text = FINISHED_BUTTON_TEXT)
         }
       }
+      data class Product(
+        val name: String,
+        val relatedProducts: List<Product>,
+      )
+      val product = Product("Tortilla Chips",
+        listOf(
+          Product("Salsa", listOf(
+            Product("Tacos", listOf(
+              Product("Tortilla", listOf()))))),
+          Product("Guac", listOf(
+            Product("Pita Chips", listOf()))),
+        )
+      )
+      val queue = ArrayDeque<Product>()
+      queue.add(product)
+      val listOfRelatedProducts = remember { mutableStateListOf<String>() }
+      while (queue.isNotEmpty()) {
+        val queueProduct = queue.removeFirst()
+        listOfRelatedProducts.add(queueProduct.name)
+        if(queueProduct.relatedProducts.isNotEmpty()) {
+          queueProduct.relatedProducts.forEach { queue.add(it) }
+        }
+      }
+      Log.d("All Related Products", listOfRelatedProducts.toList().toString())
     }
   }
 }
